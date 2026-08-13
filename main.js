@@ -85,7 +85,8 @@ function killDsh() {
   if (!dshChild || dshChild.killed) return;
   try {
     // /T kills the whole tree (cmd.exe -> node).
-    execFile("taskkill", ["/PID", String(dshChild.pid), "/T", "/F"], () => {});
+    // windowsHide: taskkill is a console app — don't flash a console window.
+    execFile("taskkill", ["/PID", String(dshChild.pid), "/T", "/F"], { windowsHide: true }, () => {});
   } catch {
     /* best effort */
   }
