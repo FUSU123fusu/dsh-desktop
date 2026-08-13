@@ -10,7 +10,7 @@ const path = require("node:path");
 const fs = require("node:fs");
 const os = require("node:os");
 
-const BOOT_TIMEOUT_MS = 60000;
+const BOOT_TIMEOUT_MS = 60000; // show "still starting" notice after this
 
 let mainWindow = null;
 let dshChild = null;
@@ -55,8 +55,14 @@ function bootDsh() {
     let stderrBuf = "";
     const urlRe = /dsh web:\s*(https?:\/\/\S+)/i;
 
+    // Cold boots can exceed a minute under AV scanning — don't fail, just
+    // tell the user it's still coming and keep waiting for the URL.
     const timer = setTimeout(() => {
-      reject(new Error(`等待 dsh web 启动超时（${BOOT_TIMEOUT_MS / 1000}s）\n${stderrBuf}`));
+      if (mainWindow) {
+        mainWindow.webContents.executeJavaScript(
+          "window.showSlow && window.showSlow()"
+        ).catch(() => {});
+      }
     }, BOOT_TIMEOUT_MS);
 
     child.stdout.on("data", (chunk) => {

@@ -30,7 +30,7 @@
   <div class="box">
     <div class="spinner" id="spinner"></div>
     <h1 id="title">正在启动 dsh…</h1>
-    <p>正在拉起本地 <code>dsh web</code> 服务，首次启动可能需要十几秒。</p>
+    <p id="hint">正在拉起本地 <code>dsh web</code> 服务，首次启动可能需要十几秒。</p>
     <pre id="err"></pre>
   </div>
   <script>
@@ -40,6 +40,11 @@
       const pre = document.getElementById("err");
       pre.style.display = "block";
       pre.textContent = msg;
+    };
+    window.showSlow = () => {
+      document.getElementById("title").textContent = "仍在启动中…";
+      document.getElementById("hint").textContent =
+        "这次启动比较慢（通常是杀毒软件在扫描首次运行的文件），不用动，界面出来会自动切换。";
     };
   </script>
 </body>
