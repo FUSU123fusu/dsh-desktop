@@ -138,21 +138,36 @@ async function start() {
   }
 }
 
-app.whenReady().then(start);
-
-app.on("before-quit", () => {
-  quitting = true;
-  killDsh();
-});
-
-app.on("window-all-closed", () => {
-  killDsh();
+// Single-instance lock: a second launch just focuses the running window
+// instead of booting another dsh server.
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
   app.quit();
-});
+} else {
+  app.on("second-instance", () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+  });
 
-app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0 && !quitting) start();
-});
+  app.whenReady().then(start);
+
+  app.on("before-quit", () => {
+    quitting = true;
+    killDsh();
+  });
+
+  app.on("window-all-closed", () => {
+    killDsh();
+    app.quit();
+  });
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0 && !quitting) start();
+  });
+}
+
 
 process.on("uncaughtException", (err) => {
   dialog.showErrorBox("dsh-desktop 错误", String(err && err.stack || err));
