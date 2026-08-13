@@ -1,0 +1,43 @@
+{
+  "name": "dsh-desktop",
+  "version": "0.1.0",
+  "description": "Self-contained Electron desktop app for dsh web (DeepSeek Harness); dsh is bundled, no Node.js/npm needed",
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "sync-dsh": "robocopy \"%APPDATA%\\npm\\node_modules\\@deepseek-ai\\dsh\" dsh-bundle //E //NFL //NDL //NJH //NJS //PURGE || exit 0",
+    "dist": "electron-builder",
+    "dist:portable": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "local.dsh.desktop",
+    "productName": "dsh",
+    "files": [
+      "main.js",
+      "loading.html",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "dsh-bundle",
+        "to": "dsh"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "dsh"
+    }
+  }
+}
