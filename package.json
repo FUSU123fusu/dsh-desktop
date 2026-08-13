@@ -22,12 +22,7 @@
       "loading.html",
       "package.json"
     ],
-    "extraResources": [
-      {
-        "from": "dsh-bundle",
-        "to": "dsh"
-      }
-    ],
+    "afterPack": "afterPack.js",
     "win": {
       "target": [
         "nsis",

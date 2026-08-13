@@ -32,4 +32,5 @@ npm run dist:portable  # 只打便携版
 
 - `main.js` — Electron 主进程（拉起/回收 dsh、窗口管理）
 - `loading.html` — 启动等待与错误提示页
+- `afterPack.js` — 打包钩子，把 `dsh-bundle/` 原样复制进 `resources/dsh`（不用 `extraResources`，它会静默过滤 `node_modules`）
 - `dsh-bundle/` — dsh 本体（由 `npm run sync-dsh` 生成，不入库）
