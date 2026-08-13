@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "electron .",
-    "sync-dsh": "robocopy \"%APPDATA%\\npm\\node_modules\\@deepseek-ai\\dsh\" dsh-bundle //E //NFL //NDL //NJH //NJS //PURGE || exit 0",
+    "sync-dsh": "robocopy \"%APPDATA%\\npm\\node_modules\\@deepseek-ai\\dsh\" dsh-bundle //E //NFL //NDL //NJH //NJS //PURGE & node patch-dsh.js",
+    "predist": "node patch-dsh.js",
     "dist": "electron-builder",
     "dist:portable": "electron-builder --win portable"
   },

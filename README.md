@@ -30,7 +30,8 @@ npm run dist:portable  # 只打便携版
 
 ## 文件
 
-- `main.js` — Electron 主进程（拉起/回收 dsh、窗口管理）
+- `main.js` — Electron 主进程（拉起/回收 dsh、窗口管理、单实例锁）
 - `loading.html` — 启动等待与错误提示页
 - `afterPack.js` — 打包钩子，把 `dsh-bundle/` 原样复制进 `resources/dsh`（不用 `extraResources`，它会静默过滤 `node_modules`）
+- `patch-dsh.js` — 对内置 dsh 的本地补丁（目前一项：给 `dsh-subprocess-local` 的 spawn 加 `windowsHide`，否则 Windows 下每跑一条命令闪一个控制台窗口）。`sync-dsh` 和 `dist` 会自动执行，幂等
 - `dsh-bundle/` — dsh 本体（由 `npm run sync-dsh` 生成，不入库）
